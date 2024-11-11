@@ -1,0 +1,50 @@
+services:
+  localstack:
+    container_name: "${LOCALSTACK_DOCKER_NAME:-localstack-main}"
+    image: localstack/localstack
+    ports:
+      - "127.0.0.1:4566:4566"            # LocalStack Gateway
+      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+    environment:
+      # LocalStack configuration: https://docs.localstack.cloud/references/configuration/
+      - DEBUG=${DEBUG:-0}
+      - SERVICES	s3,dynamodb,sqs
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      
+  user-service:
+    container_name: "user-service"
+    build: .
+    ports:
+      - "8002:8001"
+    environment:
+      AWS_ACCESS_KEY_ID: DUMMYIDEXAMPLE
+      AWS_SECRET_ACCESS_KEY: DUMMYEXAMPLEKEY
+      BASE_END_POINT: http://host.docker.internal:4566
+      SECRET_VALUE: MY_SECRET_KEY
+      REGION: eu-west-1
+      MIN_IMAGE_SIZE_IN_MB: 1
+      MAX_IMAGE_SIZE_IN_MB: 2
+      PROCESSING_QUEUE_URL: http://sqs.eu-west-1.localhost.localstack.cloud:4566/000000000000/image_processing_queue.fifo
+      PROCESSED_QUEUE_URL: http://sqs.eu-west-1.localhost.localstack.cloud:4566/000000000000/image_processed_queue.fifo
+      MODULE: USER_SERVICE
+      PORT: 0.0.0.0:8001
+
+  image-service:
+    container_name: "image-service"
+    build: .
+    ports:
+      - "8003:8001"
+    environment:
+      AWS_ACCESS_KEY_ID: DUMMYIDEXAMPLE
+      AWS_SECRET_ACCESS_KEY: DUMMYEXAMPLEKEY
+      BASE_END_POINT: http://host.docker.internal:4566
+      SECRET_VALUE: MY_SECRET_KEY
+      REGION: eu-west-1
+      MIN_IMAGE_SIZE_IN_MB: 1
+      MAX_IMAGE_SIZE_IN_MB: 2
+      PROCESSING_QUEUE_URL: http://sqs.eu-west-1.localhost.localstack.cloud:4566/000000000000/image_processing_queue.fifo
+      PROCESSED_QUEUE_URL: http://sqs.eu-west-1.localhost.localstack.cloud:4566/000000000000/image_processed_queue.fifo
+      MODULE: IMAGE_SERVICE
+      PORT: 0.0.0.0:8001
