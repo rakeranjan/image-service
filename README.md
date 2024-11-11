@@ -2,6 +2,9 @@
 
 The service is using aws stack , for testing/development we are using localstack
 
+Command to start testing
+`docker-compose up`
+
 # user-service
 on localhost:8002
 command to create a user
