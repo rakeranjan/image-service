@@ -5,6 +5,7 @@ The service is using aws stack , for testing/development we are using localstack
 # user-service
 on localhost:8002
 command to create a user
+
 ```curl --location 'localhost:8002/v1/user' \
 --header 'Authorization;' \
 --header 'User-Agent: Apidog/1.0.0 (https://apidog.com)' \
