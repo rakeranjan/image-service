@@ -31,10 +31,8 @@ func (i UserServiceImplV1) Create(ctx context.Context, user *models.User) (*mode
 	if err != nil {
 		return nil, err
 	}
-	response := &models.UserResponse{
-		User:        *user,
-		AccessToken: token,
-	}
+	response := user.ToResponse()
+	response.AccessToken = token
 	return response, nil
 }
 func (i UserServiceImplV1) Login(ctx context.Context, user *models.User) {}

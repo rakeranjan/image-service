@@ -41,7 +41,6 @@ func ImageRouter(engine *gin.Engine, imageHandler ImageHandlerV1) {
 func UserRouter(engine *gin.Engine, userHandler UserHandlerV1) {
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		v.RegisterValidation("userNameFormat", validators.ValidateUserName)
-		v.RegisterValidation("userNameFormat", validators.ValidateUserName)
 		v.RegisterValidation("phoneNumberFormat", validators.ValidatePhoneNumber)
 	}
 	// validator

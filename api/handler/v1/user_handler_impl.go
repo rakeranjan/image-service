@@ -27,6 +27,7 @@ func (u *UserHandlerImpl) Create(c *gin.Context) {
 	resp, err := u.UserService.Create(c.Request.Context(), &json)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 	c.JSON(http.StatusCreated, resp)
 }
