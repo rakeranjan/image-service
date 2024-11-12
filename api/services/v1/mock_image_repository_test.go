@@ -7,7 +7,7 @@
 //
 
 // Package mock_v1 is a generated GoMock package.
-package v1_test
+package v1
 
 import (
 	context "context"
@@ -57,10 +57,10 @@ func (mr *MockImageRepositoryMockRecorder) DeleteImageMetaData(ctx, data any) *g
 }
 
 // GetAllImageMetaData mocks base method.
-func (m *MockImageRepository) GetAllImageMetaData(ctx context.Context, user models.User) ([]*models.ImageMetaData, error) {
+func (m *MockImageRepository) GetAllImageMetaData(ctx context.Context, user *models.User) (string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetAllImageMetaData", ctx, user)
-	ret0, _ := ret[0].([]*models.ImageMetaData)
+	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -72,22 +72,51 @@ func (mr *MockImageRepositoryMockRecorder) GetAllImageMetaData(ctx, user any) *g
 }
 
 // GetImageMetaData mocks base method.
-func (m *MockImageRepository) GetImageMetaData(ctx context.Context, user models.User) (*models.ImageMetaData, error) {
+func (m *MockImageRepository) GetImageMetaData(ctx context.Context, user models.User, imageID string) (*models.ImageResponse, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetImageMetaData", ctx, user)
-	ret0, _ := ret[0].(*models.ImageMetaData)
+	ret := m.ctrl.Call(m, "GetImageMetaData", ctx, user, imageID)
+	ret0, _ := ret[0].(*models.ImageResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetImageMetaData indicates an expected call of GetImageMetaData.
-func (mr *MockImageRepositoryMockRecorder) GetImageMetaData(ctx, user any) *gomock.Call {
+func (mr *MockImageRepositoryMockRecorder) GetImageMetaData(ctx, user, imageID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetImageMetaData", reflect.TypeOf((*MockImageRepository)(nil).GetImageMetaData), ctx, user)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetImageMetaData", reflect.TypeOf((*MockImageRepository)(nil).GetImageMetaData), ctx, user, imageID)
+}
+
+// GetImageMetaDataByImageID mocks base method.
+func (m *MockImageRepository) GetImageMetaDataByImageID(ctx context.Context, user *models.User, imageID string) (*models.ImageResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetImageMetaDataByImageID", ctx, user, imageID)
+	ret0, _ := ret[0].(*models.ImageResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetImageMetaDataByImageID indicates an expected call of GetImageMetaDataByImageID.
+func (mr *MockImageRepositoryMockRecorder) GetImageMetaDataByImageID(ctx, user, imageID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetImageMetaDataByImageID", reflect.TypeOf((*MockImageRepository)(nil).GetImageMetaDataByImageID), ctx, user, imageID)
+}
+
+// SaveImageMetaData mocks base method.
+func (m *MockImageRepository) SaveImageMetaData(ctx context.Context, data *models.ImageMetaData) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SaveImageMetaData", ctx, data)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SaveImageMetaData indicates an expected call of SaveImageMetaData.
+func (mr *MockImageRepositoryMockRecorder) SaveImageMetaData(ctx, data any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveImageMetaData", reflect.TypeOf((*MockImageRepository)(nil).SaveImageMetaData), ctx, data)
 }
 
 // SendToSqsForProcessing mocks base method.
-func (m *MockImageRepository) SendToSqsForProcessing(ctx context.Context, imageMetaData models.ImageMetaData) error {
+func (m *MockImageRepository) SendToSqsForProcessing(ctx context.Context, imageMetaData *models.ImageMetaData) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SendToSqsForProcessing", ctx, imageMetaData)
 	ret0, _ := ret[0].(error)
@@ -115,15 +144,15 @@ func (mr *MockImageRepositoryMockRecorder) UpdateImageMetaData(ctx, data any) *g
 }
 
 // UploadToProcessing mocks base method.
-func (m *MockImageRepository) UploadToProcessing(ctx context.Context, metaData models.ImageMetaData, fileHeader multipart.FileHeader, objectKey, fileName string) error {
+func (m *MockImageRepository) UploadToProcessing(ctx context.Context, metaData *models.ImageMetaData, fileHeader *multipart.FileHeader) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UploadToProcessing", ctx, metaData, fileHeader, objectKey, fileName)
+	ret := m.ctrl.Call(m, "UploadToProcessing", ctx, metaData, fileHeader)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // UploadToProcessing indicates an expected call of UploadToProcessing.
-func (mr *MockImageRepositoryMockRecorder) UploadToProcessing(ctx, metaData, fileHeader, objectKey, fileName any) *gomock.Call {
+func (mr *MockImageRepositoryMockRecorder) UploadToProcessing(ctx, metaData, fileHeader any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UploadToProcessing", reflect.TypeOf((*MockImageRepository)(nil).UploadToProcessing), ctx, metaData, fileHeader, objectKey, fileName)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UploadToProcessing", reflect.TypeOf((*MockImageRepository)(nil).UploadToProcessing), ctx, metaData, fileHeader)
 }
