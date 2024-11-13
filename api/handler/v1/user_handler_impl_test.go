@@ -19,8 +19,7 @@ import (
 
 func TestUserHandlerImpl_Create(t *testing.T) {
 	type mockDetails struct {
-		mockObject *MockUserService
-		// *models.UserResponse, error
+		mockObject       *MockUserService
 		mockUserResponse *models.UserResponse
 		mockError        error
 	}

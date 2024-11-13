@@ -2,7 +2,7 @@ package v1
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"log"
 	"mime/multipart"
 	"time"
@@ -23,8 +23,13 @@ func NewImageServiceV1() *ImageServiceImpl {
 }
 
 func (i ImageServiceImpl) Upload(ctx context.Context, user *models.User, fileHeader *multipart.FileHeader) (*models.ImageMetaData, error) {
+	if user == nil {
+		return nil, errors.New("user not found")
+	}
+	if fileHeader == nil {
+		return nil, errors.New("no upload found")
+	}
 	imageMetaData := getImageAnalysis(user, fileHeader)
-	fmt.Println(imageMetaData)
 	err := i.imageRepository.SaveImageMetaData(ctx, imageMetaData)
 	if err != nil {
 		log.Println("Failed while saving imageMetadat to database, imageMetaData:", imageMetaData)
