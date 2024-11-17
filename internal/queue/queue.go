@@ -49,8 +49,10 @@ func (q *Queue) GetClient() *sqs.Client {
 
 func (q *Queue) CreateQueue(queueName string) *Queue {
 	var queueUrl string
-	queueAttributes := map[string]string{}
-	queueAttributes["FifoQueue"] = "true"
+	queueAttributes := map[string]string{
+		"DelaySeconds":           "0",
+		"MessageRetentionPeriod": "345600",
+	}
 	queue, err := q.client.CreateQueue(context.TODO(), &sqs.CreateQueueInput{
 		QueueName:  aws.String(queueName),
 		Attributes: queueAttributes,

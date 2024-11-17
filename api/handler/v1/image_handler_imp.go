@@ -43,6 +43,7 @@ func (i *ImageHandlerImpl) GetByID(c *gin.Context) {
 	response, err := i.imageService.GetByID(ctx, user, id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 	filePath := response.ImageId + "-" + response.FileName
 	c.File(filePath)
@@ -62,8 +63,29 @@ func (i *ImageHandlerImpl) List(c *gin.Context) {
 	defer os.RemoveAll(utils.FILE_SUFFIX + fileName)
 }
 func (i *ImageHandlerImpl) Update(c *gin.Context) {
-	panic("implement me")
+	user := utils.GetUSer(c)
+	ctx := c.Request.Context()
+	id := c.Param("id")
+	file, err := c.FormFile("file")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	data, err := i.imageService.Update(ctx, user, id, file)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusAccepted, gin.H{"message": "updated successfully", "imageMetaData": data})
 }
 func (i *ImageHandlerImpl) Delete(c *gin.Context) {
-	panic("implement me")
+	user := utils.GetUSer(c)
+	ctx := c.Request.Context()
+	id := c.Param("id")
+	ok := i.imageService.Delete(ctx, user, id)
+	if !ok {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Something went wrong"})
+		return
+	}
+	c.JSON(http.StatusAccepted, gin.H{"message": "deleted successfully"})
 }

@@ -10,6 +10,8 @@ type ImageMetaData struct {
 	UserPhoneNumber string    `dynamodbav:"userPhoneNumber"`
 	SizeInKb        int       `dynamodbav:"sizeInKb"`
 	IsProcessed     bool      `dynamodbav:"isProcessed"`
+	Height          int       `dynamodbav:"height"`
+	Width           int       `dynamodbav:"width"`
 }
 
 func (i *ImageMetaData) GetObjectKey() string {

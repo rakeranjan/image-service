@@ -51,6 +51,7 @@ func (i *ImageRepositoryImpl) UploadToProcessing(ctx context.Context, metaData *
 	file, err := fileHeader.Open()
 	if err != nil {
 		log.Printf("Couldn't open file %v to upload. Here's why: %v\n", fileName, err)
+		return err
 	} else {
 		defer file.Close()
 		_, err = i.objectStorage.GetClient().PutObject(ctx, &s3.PutObjectInput{
@@ -83,15 +84,15 @@ func (i *ImageRepositoryImpl) SendToSqsForProcessing(ctx context.Context, imageM
 		return nil
 	}
 	_, err = i.queueClient.GetClient().SendMessage(context.TODO(), &sqs.SendMessageInput{
-		MessageBody:            aws.String(string(message)),
-		QueueUrl:               aws.String(i.conf.ProcessingQueueURL),
-		MessageGroupId:         aws.String(imageMetaData.UserId),
-		MessageDeduplicationId: aws.String(imageMetaData.UserId),
+		MessageBody: aws.String(string(message)),
+		QueueUrl:    aws.String(i.conf.ProcessingQueueURL),
+		// MessageGroupId: aws.String(imageMetaData.UserId),
+		// MessageDeduplicationId: aws.String(imageMetaData.UserId),
 	})
 	return err
 }
 
-func (i *ImageRepositoryImpl) GetImageMetaData(ctx context.Context, user models.User, imageID string) (*models.ImageResponse, error) {
+func (i *ImageRepositoryImpl) GetImageMetaData(ctx context.Context, user *models.User, imageID string) (*models.ImageResponse, error) {
 	imageMetaData, err := i.GetImageMetaDataWIthID(ctx, imageID, user.ID)
 	if err != nil {
 		return nil, err
@@ -138,8 +139,13 @@ func (i *ImageRepositoryImpl) UpdateImageMetaData(ctx context.Context, data *mod
 	panic("implement me")
 }
 
-func (i *ImageRepositoryImpl) DeleteImageMetaData(ctx context.Context, data *models.ImageMetaData) error {
-	panic("implement me")
+func (i *ImageRepositoryImpl) DeleteProcessedObjext(ctx context.Context, data *models.ImageMetaData) error {
+	objectKey := data.GetObjectKey()
+	_, err := i.objectStorage.GetClient().DeleteObject(ctx, &s3.DeleteObjectInput{
+		Bucket: aws.String(utils.PROCESSED_BUCKET),
+		Key:    aws.String(objectKey),
+	})
+	return err
 }
 
 func (i *ImageRepositoryImpl) SaveImageMetaData(ctx context.Context, data *models.ImageMetaData) error {
@@ -247,7 +253,7 @@ func (i *ImageRepositoryImpl) GetAllImageMetaDataWIthID(ctx context.Context, use
 func (i *ImageRepositoryImpl) GetDownLoadLink(ctx context.Context, imageMetaData *models.ImageMetaData) (*os.File, error) {
 	objectKey := imageMetaData.GetObjectKey()
 	result, err := i.objectStorage.GetClient().GetObject(ctx, &s3.GetObjectInput{
-		Bucket: aws.String(utils.PROCESSING_BUCKET),
+		Bucket: aws.String(utils.PROCESSED_BUCKET),
 		Key:    aws.String(objectKey),
 	})
 	if err != nil {
@@ -273,7 +279,7 @@ func (i *ImageRepositoryImpl) GetAllDownLoadLink(ctx context.Context, imageMetaD
 	for _, imageMetaData := range imageMetaDatas {
 		objectKey := imageMetaData.GetObjectKey()
 		result, err := i.objectStorage.GetClient().GetObject(ctx, &s3.GetObjectInput{
-			Bucket: aws.String(utils.PROCESSING_BUCKET),
+			Bucket: aws.String(utils.PROCESSED_BUCKET),
 			Key:    aws.String(objectKey),
 		})
 		if err != nil {

@@ -25,7 +25,7 @@ func (m *MockImageRepository) SendToSqsForProcessing(ctx context.Context, imageM
 	args := m.Called(ctx, imageMetaData)
 	return args.Error(0)
 }
-func (m *MockImageRepository) GetImageMetaData(ctx context.Context, user models.User, imageID string) (*models.ImageResponse, error) {
+func (m *MockImageRepository) GetImageMetaData(ctx context.Context, user *models.User, imageID string) (*models.ImageResponse, error) {
 	args := m.Called(ctx, user, imageID)
 	return args.Get(0).(*models.ImageResponse), args.Error(1)
 }
@@ -41,7 +41,7 @@ func (m *MockImageRepository) UpdateImageMetaData(ctx context.Context, data *mod
 	args := m.Called(ctx, data)
 	return args.Error(1)
 }
-func (m *MockImageRepository) DeleteImageMetaData(ctx context.Context, data *models.ImageMetaData) error {
+func (m *MockImageRepository) DeleteProcessedObjext(ctx context.Context, data *models.ImageMetaData) error {
 	args := m.Called(ctx, data)
 	return args.Error(1)
 }

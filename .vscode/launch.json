@@ -18,10 +18,11 @@
                 "REGION": "eu-west-1",
                 "MIN_IMAGE_SIZE_IN_MB": "1",
                 "MAX_IMAGE_SIZE_IN_MB": "2",
-                "PROCESSING_QUEUE_URL":    "http://sqs.eu-west-1.localhost.localstack.cloud:4566/000000000000/image_processing_queue.fifo",
-                "PROCESSED_QUEUE_URL": "http://sqs.eu-west-1.localhost.localstack.cloud:4566/000000000000/image_processed_queue.fifo",
+                "PROCESSING_QUEUE_URL":    "http://sqs.eu-west-1.localhost.localstack.cloud:4566/000000000000/image_processing_queue",
+                "PROCESSED_QUEUE_URL": "http://sqs.eu-west-1.localhost.localstack.cloud:4566/000000000000/image_processed_queue",
                 // "MODULE": "USER_SERVICE",
                 "MODULE": "IMAGE_SERVICE",
+                // "MODULE": "IMAGE_PROCESSOR",
                 "PORT": ":8001"
             }
         }

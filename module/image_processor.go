@@ -4,9 +4,11 @@ import (
 	"context"
 
 	"github.com/rakeranjan/image-service/internal/configuration"
+	db "github.com/rakeranjan/image-service/internal/database/dynamodb"
 	objectdatabase "github.com/rakeranjan/image-service/internal/database/object_database"
 	"github.com/rakeranjan/image-service/internal/queue"
 	"github.com/rakeranjan/image-service/utils"
+	"github.com/rakeranjan/image-service/workers"
 )
 
 // IMAGE_PROCESSOR
@@ -27,11 +29,11 @@ func NewImageProcessor(ctx context.Context, conf *configuration.Config) *ImagePr
 
 func (u ImageProcessor) StartProcess() error {
 	setUpImageProcessorInfra()
-	// start listening to queue
-	// STEP 1 recieve imageMetadat from queue
-	// STEP 2 using imageMetadat fetch image from S3
-	// STEP 3 analyse image & store info to imageMetaData, mark inProcessed to true
-	// STEP 4 send mesage imageMetaDat as a message to Processed Queue
+	objectStorage := objectdatabase.NewObjectStorage()
+	sqsClient := queue.NewQueue()
+	dbClient := db.NewDataBase()
+	worker := workers.NewImageProcessor(u.conf, objectStorage, sqsClient, dbClient)
+	worker.Process(u.ctx)
 	return nil
 }
 
@@ -39,5 +41,6 @@ func setUpImageProcessorInfra() {
 	objStorage := objectdatabase.NewObjectStorage()
 	objStorage.CreateBucket(context.TODO(), utils.PROCESSED_BUCKET)
 	queue := queue.NewQueue()
+	queue.CreateQueue(utils.IMAGE_PROCESSING_QUEUE)
 	queue.CreateQueue(utils.IMAGE_PROCESSED_QUEUE)
 }

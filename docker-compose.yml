@@ -44,7 +44,23 @@ services:
       REGION: eu-west-1
       MIN_IMAGE_SIZE_IN_MB: 1
       MAX_IMAGE_SIZE_IN_MB: 2
-      PROCESSING_QUEUE_URL: http://sqs.eu-west-1.localhost.localstack.cloud:4566/000000000000/image_processing_queue.fifo
-      PROCESSED_QUEUE_URL: http://sqs.eu-west-1.localhost.localstack.cloud:4566/000000000000/image_processed_queue.fifo
+      PROCESSING_QUEUE_URL: http://sqs.eu-west-1.localhost.localstack.cloud:4566/000000000000/image_processing_queue
+      PROCESSED_QUEUE_URL: http://sqs.eu-west-1.localhost.localstack.cloud:4566/000000000000/image_processed_queue
       MODULE: IMAGE_SERVICE
+      PORT: 0.0.0.0:8001
+   
+  image-processor:
+    container_name: "image-processor"
+    build: .
+    environment:
+      AWS_ACCESS_KEY_ID: DUMMYIDEXAMPLE
+      AWS_SECRET_ACCESS_KEY: DUMMYEXAMPLEKEY
+      BASE_END_POINT: http://host.docker.internal:4566
+      SECRET_VALUE: MY_SECRET_KEY
+      REGION: eu-west-1
+      MIN_IMAGE_SIZE_IN_MB: 1
+      MAX_IMAGE_SIZE_IN_MB: 2
+      PROCESSING_QUEUE_URL: http://sqs.eu-west-1.localhost.localstack.cloud:4566/000000000000/image_processing_queue
+      PROCESSED_QUEUE_URL: http://sqs.eu-west-1.localhost.localstack.cloud:4566/000000000000/image_processed_queue
+      MODULE: IMAGE_PROCESSOR
       PORT: 0.0.0.0:8001

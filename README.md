@@ -48,6 +48,18 @@ curl --location 'localhost:8003/v1/images' \
 --header 'Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzE0MzE0MDMsImZpcnN0TmFtZSI6ImEiLCJpZCI6ImI3MTg3NjVlLWI5NjEtNDYxOS05NWJmLTg5MDEwMjE2NzdjZSIsImxhc3ROYW1lIjoiYiIsInBob25lTnVtYmVyIjoiMTIzNDU2Nzg5MCIsInVzZXJOYW1lIjoiY2F0LnJhbiJ9.3d2RxaoexMZzdtnEZ_gdBd6IHDLloLmjgmvPsqQaGuA'
 ```
 
+Update image 
+```
+curl --location --request PUT 'localhost:8001/v1/image/e2f37355-646a-4cec-8f81-c0c06d099ac3' \
+--header 'Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzE4OTk3NTgsImZpcnN0TmFtZSI6ImEiLCJpZCI6IjkyOTEyZTM4LWRhZTgtNDk3MC04MDQ3LTI3YjJkMTViMjY4YiIsImxhc3ROYW1lIjoiYiIsInBob25lTnVtYmVyIjoiMTIzNDU2Nzg5MCIsInVzZXJOYW1lIjoiY2F0LnJhbiJ9.WjorCqDJxX4xUfPyiJnLgpSALr0RSc6svNaQTYzuvts' \
+--form 'file=@"/Users/rakeshranjan/Documents/aidash.jpg"'
+```
+
+DeleteImage
+```
+curl --location --request DELETE 'localhost:8001/v1/image/e2f37355-646a-4cec-8f81-c0c06d099ac3' \
+--header 'Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzE4OTk3NTgsImZpcnN0TmFtZSI6ImEiLCJpZCI6IjkyOTEyZTM4LWRhZTgtNDk3MC04MDQ3LTI3YjJkMTViMjY4YiIsImxhc3ROYW1lIjoiYiIsInBob25lTnVtYmVyIjoiMTIzNDU2Nzg5MCIsInVzZXJOYW1lIjoiY2F0LnJhbiJ9.WjorCqDJxX4xUfPyiJnLgpSALr0RSc6svNaQTYzuvts'
+```
 
 
 

@@ -22,6 +22,10 @@ func NewModule(ctx context.Context, conf *configuration.Config) ServiceModule {
 		{
 			return module.NewImageService(ctx, conf)
 		}
+	case utils.IMAGE_PROCESSOR:
+		{
+			return module.NewImageProcessor(ctx, conf)
+		}
 	}
 	return nil
 }

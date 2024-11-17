@@ -66,12 +66,40 @@ func (i ImageServiceImpl) List(ctx context.Context, user *models.User) (string, 
 	return imageReponses, nil
 }
 
-func (i ImageServiceImpl) Update(ctx context.Context, user *models.User, imageID string) bool {
-	panic("implementme")
+func (i ImageServiceImpl) Update(ctx context.Context, user *models.User, imageID string, fileHeader *multipart.FileHeader) (*models.ImageMetaData, error) {
+	data, err := i.imageRepository.GetImageMetaDataByImageID(ctx, user, imageID)
+	if err != nil {
+		return nil, err
+	}
+	// upload new image
+	err = i.imageRepository.UploadToProcessing(ctx, &data.ImageMetaData, fileHeader)
+	if err != nil {
+		return nil, err
+	}
+	data.ImageMetaData.IsProcessed = false
+
+	err = i.imageRepository.SendToSqsForProcessing(ctx, &data.ImageMetaData)
+	if err != nil {
+		return nil, err
+	}
+
+	err = i.imageRepository.DeleteProcessedObjext(ctx, &data.ImageMetaData)
+	if err != nil {
+		//  for now // return nil, err
+	}
+	return &data.ImageMetaData, err
 }
 
 func (i ImageServiceImpl) Delete(ctx context.Context, user *models.User, imageID string) bool {
-	panic("implementme")
+	data, err := i.imageRepository.GetImageMetaDataByImageID(ctx, user, imageID)
+	if err != nil {
+		return false
+	}
+	err = i.imageRepository.DeleteProcessedObjext(ctx, &data.ImageMetaData)
+	if err != nil {
+		return false
+	}
+	return true
 }
 
 func getImageAnalysis(user *models.User, file *multipart.FileHeader) *models.ImageMetaData {
