@@ -32,7 +32,7 @@ func (i ImageServiceImpl) Upload(ctx context.Context, user *models.User, fileHea
 	imageMetaData := getImageAnalysis(user, fileHeader)
 	err := i.imageRepository.SaveImageMetaData(ctx, imageMetaData)
 	if err != nil {
-		log.Println("Failed while saving imageMetadat to database, imageMetaData:", imageMetaData)
+		log.Println("Failed while saving imageMetadata to database, imageMetaData:", imageMetaData)
 		return nil, err
 	}
 

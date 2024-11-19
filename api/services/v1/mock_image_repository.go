@@ -39,9 +39,9 @@ func (m *MockImageRepository) GetAllImageMetaData(ctx context.Context, user *mod
 }
 func (m *MockImageRepository) UpdateImageMetaData(ctx context.Context, data *models.ImageMetaData) error {
 	args := m.Called(ctx, data)
-	return args.Error(1)
+	return args.Error(0)
 }
 func (m *MockImageRepository) DeleteProcessedObjext(ctx context.Context, data *models.ImageMetaData) error {
 	args := m.Called(ctx, data)
-	return args.Error(1)
+	return args.Error(0)
 }

@@ -131,7 +131,6 @@ func (i *ImageRepositoryImpl) GetAllImageMetaData(ctx context.Context, user *mod
 	if err != nil {
 		return "", err
 	}
-
 	return filePath, nil
 }
 
